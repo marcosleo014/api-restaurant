@@ -5,7 +5,7 @@
   "main": "./src/server",
   "scripts": {
     "dev": "tsx --watch src/server.ts",
-    "knex": "node --import tsx ./node_modules/.bin/knex"
+    "knex": "node --import tsx ./node_modules/knex/bin/cli.js"
   },
   "author": "Marcos Leonan",
   "license": "ISC",
