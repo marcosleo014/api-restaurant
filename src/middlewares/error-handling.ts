@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { AppError } from "../utils/AppError";
+import { z, ZodError } from "zod";
 
 export function errorHandling(
     error: Error,
@@ -10,6 +11,13 @@ export function errorHandling(
     if (error instanceof AppError) {
         return response.status(error.statusCode).json({
             message: error.message
+        });
+    };
+
+    if (error instanceof ZodError) {
+        return response.status(400).json({
+            message: "Dados de entrada inválidos",
+            issues: z.flattenError(error).fieldErrors
         });
     };
 
