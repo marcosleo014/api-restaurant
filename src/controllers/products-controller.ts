@@ -5,11 +5,11 @@ import { AppError } from "../utils/AppError";
 
 export class ProductController {
 
-    async index(
+    index = async (
         request: Request,
         response: Response,
         next: NextFunction
-    ) {
+    ) => {
         const { name, price_min, price_max } = z.object({
             name: z.string().optional(),
             price_min: z.coerce.number().nonnegative().optional(),
@@ -32,11 +32,11 @@ export class ProductController {
         return response.status(200).json(products);
     };
 
-    async create(
+    create = async (
         request: Request,
         response: Response,
         next: NextFunction
-    ) {
+    ) => {
         const { name, price } = z.object({
             name: z.string().trim().min(3),
             price: z.number().positive()
@@ -47,16 +47,17 @@ export class ProductController {
         return response.status(201).json(productCreate);
     };
 
-    async update(
+    update = async (
         request: Request,
         response: Response,
         next: NextFunction
-    ) {
+    ) => {
         const { id } = z.object({
             id: z.coerce.number()
         }).parse(request.params);
 
-        if (!await this.findById(id)) {
+        const product = await this.findById(id);
+        if (!product) {
             throw new AppError("Produto não encontrado", 404);
         };
 
@@ -72,11 +73,11 @@ export class ProductController {
         return response.status(200).json(productUpdate);
     };
 
-    async remove(
+    remove = async (
         request: Request,
         response: Response,
         next: NextFunction
-    ) {
+    ) => {
         const { id } = z.object({
             id: z.coerce.number().positive()
         }).parse(request.params);
